@@ -1,0 +1,56 @@
+# Regex rules for classifying a model into a capability tier from its
+# id/family/name alone. Matched case-insensitively against "id family name"
+# joined with spaces. First rule to match wins.
+#
+# Cost is checked before any rule here runs (see ClassifyModel): a model
+# with known cost.input == cost.output == 0 is always "free", regardless of
+# what its name says.
+#
+# Every pattern below is an industry-wide size/generation word — Anthropic's
+# own model-line names, and terms other providers reuse for the same size
+# class (Google's Pro/Flash/Flash-Lite, OpenAI's mini/nano) — never a
+# specific provider or resource name. "relayhaus/sonnet" must classify as
+# standard from the word "sonnet" alone; no rule here (or anywhere in the
+# classifier) may name a specific provider like "relayhaus" to make that
+# work.
+#
+# Deliberately no bare "flash" rule: real pricing data (opencode's own
+# cost.input) shows the Flash line spans both a cheap price point (~$0.3,
+# e.g. gemini-2.5-flash) and an expert-level one (~$1.5, e.g.
+# gemini-3.5-flash/3.6-flash) across providers and generations — a keyword
+# match alone can't call it. It falls through to the cost-tercile fallback
+# in ClassifyModel instead, which can. "flash-lite" is unambiguous (every
+# observed instance is cheap) and gets its own rule below.
+
+[[rules]]
+tier = "guru"
+# Anthropic's newest/cutting-edge line, released alongside or after opus —
+# sparse today (claude only); not a downgrade from expert.
+pattern = '\bfable\b'
+
+[[rules]]
+tier = "expert"
+# opus = Anthropic's flagship. frontier/ultra = generic top-of-line words.
+# -max = a size suffix several providers use for their largest variant
+# (e.g. qwen-max).
+#
+# Deliberately no "-pro" rule: Google's Gemini Pro is consistently
+# expensive in real captured pricing (~$1.25-2), but DeepSeek's
+# "deepseek-v4-pro" prices at $0.66 — squarely standard-tier. "pro" is not
+# a safe cross-provider size signal the way opus/sonnet/haiku/max are, so
+# it falls through to the cost-tercile fallback instead of guessing.
+pattern = '\bopus\b|\bfrontier\b|\bultra\b|-max\b'
+
+[[rules]]
+tier = "standard"
+# sonnet = Anthropic's mid-tier workhorse. -plus = a mid-tier size suffix
+# (e.g. qwen-plus) sitting between a family's base and max variants.
+pattern = '\bsonnet\b|-plus\b'
+
+[[rules]]
+tier = "fast"
+# haiku = Anthropic's cheap/quick line. flash-lite = Google's explicitly
+# cheap Flash variant (real pricing: $0.1-0.3, consistent). mini/nano =
+# OpenAI's small-model naming, reused by other providers for the same
+# meaning.
+pattern = '\bhaiku\b|flash-?lite|\bmini\b|\bnano\b'

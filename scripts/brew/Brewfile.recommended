@@ -1,0 +1,4 @@
+# BARON recommended dependencies
+brew "gitleaks"
+brew "gh"
+brew "tmux"

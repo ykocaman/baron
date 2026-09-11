@@ -1,0 +1,37 @@
+.omo
+.beads
+
+# bd init generated
+.agents/
+.claude/
+.codex/
+CLAUDE.md
+AGENTS.md
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/
+
+# Go
+bin/
+*.exe
+*.test
+*.out
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Baron
+.baron/

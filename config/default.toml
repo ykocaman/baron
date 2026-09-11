@@ -1,0 +1,116 @@
+# Baron project configuration
+
+[general]
+# Project name (auto-detected from directory if empty)
+project_name = ""
+# Legacy alias for project_name (kept for backward compatibility)
+name = ""
+# Default model (from model registry; empty = auto-detect)
+default_model = ""
+# Default profile
+default_profile = "go"
+# Legacy alias for default_profile
+profile = "go"
+# Auto-start the assigned model after it is active
+auto_start = true
+# Silent death threshold (minutes; model produced no output)
+silent_death_threshold = 30
+# Heartbeat interval (minutes)
+heartbeat_interval = 5
+# BRN prefix used when deriving BRNs from bd issue ids (empty = bare ids)
+brn_prefix = ""
+# Branch PRs target and the secret scan diffs against
+base_branch = "main"
+
+[gate]
+# Timeout for gate execution (minutes)
+timeout = 10
+# Fail-fast on first gate failure (false = full report)
+fail_fast = true
+# Retry budget (0-3)
+retry_budget = 3
+
+[gate.gitleaks]
+# Enable gitleaks secret scanning
+enabled = true
+# Secret scan report path
+report_path = ".baron/gitleaks-report.json"
+# Redact secrets in output
+redact = true
+# Gitleaks ignore file
+ignore_path = ".gitleaksignore"
+# Gitleaks baseline path
+baseline_path = ""
+
+[merge]
+# Require human approval for merges
+require_human = true
+
+[merge.auto]
+# Auto-merge when all gates pass (default off)
+enabled = false
+# Allowed bead labels (empty list = no auto-merge)
+require_labels = []
+# Max changed files (0 = no limit)
+max_changed_files = 0
+# Max diff lines (0 = no limit)
+max_diff_lines = 0
+# Forbidden file paths (glob list)
+forbid_paths = []
+
+[tui]
+# Show cost in TUI
+show_cost = true
+# Theme (dark, light)
+theme = "dark"
+# Default screen (dashboard, queue, pr)
+default_screen = "dashboard"
+# Page size (table rows)
+page_size = 20
+# tmux usage (auto, always, never)
+tmux = "auto"
+# tmux session name
+tmux_session = "baron"
+
+[cost]
+# Budget limit per bead (USD, 0 = unlimited)
+budget_limit = 0
+# Currency (USD)
+currency = "USD"
+# Cost report format (json, text)
+report_format = "text"
+# Where model run records (wall-clock time per baron run attempt) are logged
+runs_path = ".baron/runs.jsonl"
+
+[audit]
+# Audit log path
+path = ".baron/audit/events.jsonl"
+# Show audit events
+verbose = false
+
+# Model registry (auto-filled by `baron doctor`; overrides applied on top)
+# [[models]]
+# name = "claude"
+# command = "claude"
+# tags = ["code", "general"]
+# # Headless launch flags for `baron run`; {{prompt}} is replaced with the
+# # bead's title, description and acceptance criteria.
+# args = ["-p", "{{prompt}}"]
+# # Force this model active/passive, overriding baron doctor's probe result.
+# active = true
+
+# Gate profiles ([profiles.<name>]; each stage is a command string)
+[profiles.go]
+formatter = "gofmt"
+linter = "go vet"
+typecheck = ""
+test = "go test -count=1 ./..."
+build = "go build ./..."
+
+[profiles.react-ts]
+package_manager = "auto"
+formatter = "prettier --check"
+linter = "eslint ."
+typecheck = "tsc --noEmit"
+test = "vitest run"
+build = "next build"
