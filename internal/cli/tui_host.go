@@ -2,12 +2,10 @@ package cli
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/baron-cli/baron/internal/domain"
@@ -32,19 +30,6 @@ func (a *app) agentHostFor(ctx context.Context, cfg *store.Config) tui.AgentHost
 	// Best-effort: a sweep that fails must never stop the TUI from starting.
 	_, _ = tmx.SweepViewers(ctx, pidAlive)
 	return &tmuxAgentHost{tmx: tmx}
-}
-
-// pidAlive reports whether a process id is still running. signal 0 performs
-// only the permission-and-existence check the kernel does for a real signal,
-// without delivering one; ESRCH is the "no such process" answer this needs,
-// while EPERM means it exists but belongs to someone else — still alive.
-func pidAlive(pid int) bool {
-	proc, err := os.FindProcess(pid) // never fails on unix
-	if err != nil {
-		return false
-	}
-	err = proc.Signal(syscall.Signal(0))
-	return err == nil || errors.Is(err, syscall.EPERM)
 }
 
 // hunkDeps builds the two hunk-backed Deps fields together, from a single

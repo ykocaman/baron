@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"syscall"
 	"time"
 
 	tea "charm.land/bubbletea/v2"
@@ -182,9 +181,7 @@ func (t *agentTerminal) kill() {
 	if t.cmd == nil || t.cmd.Process == nil {
 		return
 	}
-	if err := syscall.Kill(-t.cmd.Process.Pid, syscall.SIGTERM); err != nil {
-		_ = t.cmd.Process.Signal(syscall.SIGTERM)
-	}
+	killProcessGroup(t.cmd)
 }
 
 // steer types text into a running agent's session and submits it — the
