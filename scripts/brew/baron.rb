@@ -11,7 +11,6 @@ class Baron < Formula
   depends_on "git"
   depends_on "bd"
   depends_on "gitleaks"
-  depends_on "gh"
   depends_on "hunk"
 
   def install

@@ -28,8 +28,8 @@ func findModel(models []agent.Model, agentName string) (agent.Model, bool) {
 // on PATH.
 func initOut() *fakeRunner {
 	deps := map[string]string{
-		"git": "2.50.1", "bd": "1.1.2", "gitleaks": "8.30.1", "gh": "2.96.0",
-		"hunk": "0.17.0", "glow": "2.1.0", "tmux": "3.3a",
+		"git": "2.50.1", "bd": "1.1.2", "gitleaks": "8.30.1",
+		"hunk": "0.17.0", "tmux": "3.3a",
 	}
 	models := map[string]bool{"claude": true, "codex": true, "opencode": true, "gemini": true, "agy": true, "cline": true}
 	return &fakeRunner{run: func(name string, args []string) (tool.Result, error) {

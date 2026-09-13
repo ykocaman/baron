@@ -87,12 +87,8 @@ func depVersion(name string) string {
 		return "bd version 1.1.2\n"
 	case "gitleaks":
 		return "gitleaks 8.30.1\n"
-	case "gh":
-		return "gh version 2.50.0\n"
 	case "hunk":
 		return "hunk 0.17.0\n"
-	case "glow":
-		return "glow 2.1.0\n"
 	}
 	return ""
 }

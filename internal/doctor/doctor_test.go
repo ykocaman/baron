@@ -43,7 +43,6 @@ func okDeps() *fakeRunner {
 		"bd --version":       {stdout: "bd version 1.1.2 (Homebrew)\n"},
 		"gitleaks --version": {stdout: "gitleaks version 8.30.1\n"},
 		"hunk --version":     {stdout: "hunk version 0.17.0\n"},
-		"glow --version":     {stdout: "glow version 2.1.0\n"},
 		"tmux -V":            {stdout: "tmux 3.3a\n"},
 	}}
 }
@@ -62,8 +61,8 @@ func depResult(t *testing.T, results []CheckResult, name string) CheckResult {
 
 func TestCheckDepsAllPresent(t *testing.T) {
 	results := CheckDeps(context.Background(), okDeps())
-	if len(results) != 6 {
-		t.Fatalf("got %d checks, want 6", len(results))
+	if len(results) != 5 {
+		t.Fatalf("got %d checks, want 5", len(results))
 	}
 	for _, r := range results {
 		if r.Severity != SeverityOK {
@@ -78,7 +77,6 @@ func TestCheckDepsMissingMandatory(t *testing.T) {
 		"bd --version":       {stdout: "bd version 1.1.2 (Homebrew)\n"},
 		"gitleaks --version": {stdout: "gitleaks version 8.30.1\n"},
 		"hunk --version":     {stdout: "hunk version 0.17.0\n"},
-		"glow --version":     {stdout: "glow version 2.1.0\n"},
 		"tmux -V":            {stdout: "tmux 3.3a\n"},
 	}})
 
@@ -147,17 +145,17 @@ func TestCheckDepsTmuxPresent(t *testing.T) {
 
 func TestCheckDepsMissingOptional(t *testing.T) {
 	runner := okDeps()
-	delete(runner.outputs, "glow --version")
+	delete(runner.outputs, "hunk --version")
 
-	glow := depResult(t, CheckDeps(context.Background(), runner), "glow")
-	if glow.Severity != SeverityInfo {
-		t.Errorf("glow missing: Severity = %q, want %q", glow.Severity, SeverityInfo)
+	hunk := depResult(t, CheckDeps(context.Background(), runner), "hunk")
+	if hunk.Severity != SeverityInfo {
+		t.Errorf("hunk missing: Severity = %q, want %q", hunk.Severity, SeverityInfo)
 	}
-	if glow.Required {
-		t.Errorf("glow missing: Required = true, want false")
+	if hunk.Required {
+		t.Errorf("hunk missing: Required = true, want false")
 	}
-	if glow.InstallHint == "" {
-		t.Errorf("glow missing: InstallHint is empty, want hint")
+	if hunk.InstallHint == "" {
+		t.Errorf("hunk missing: InstallHint is empty, want hint")
 	}
 }
 
@@ -179,7 +177,7 @@ func TestParseVersion(t *testing.T) {
 	}{
 		{name: "git", out: "git version 2.50.1", want: "2.50.1"},
 		{name: "bd homebrew", out: "bd version 1.0.5 (Homebrew)", want: "1.0.5"},
-		{name: "gh date", out: "gh version 2.96.0 (2024-12-18)", want: "2.96.0"},
+		{name: "hunk date", out: "hunk version 0.17.0 (2024-12-18)", want: "0.17.0"},
 		{name: "gitleaks", out: "gitleaks version 8.30.1", want: "8.30.1"},
 		{name: "tmux dash-v", out: "tmux 3.3a", want: "3.3a"},
 		{name: "bare", out: "1.2.3\n", want: "1.2.3"},

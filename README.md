@@ -159,14 +159,12 @@ BARON is Go, and it drives a handful of small CLIs it doesn't bundle.
 
 * [`gitleaks`](https://github.com/gitleaks/gitleaks) — secret scanning on every gate run
 * [`tmux`](https://github.com/tmux/tmux) — persistent agent sessions that outlive BARON itself
-* [`gh`](https://cli.github.com) — GitHub CLI, for anything that touches a remote PR
 * [Hunk](https://github.com/hunk-review/hunk) — the diff reviewer embedded in BARON's Diff tab; review comments left there round-trip back to the agent as steering
-* [`glow`](https://github.com/charmbracelet/glow) — Markdown rendering inside the TUI
 
 ```bash
 git clone https://github.com/ykocaman/baron.git
 cd baron
-brew bundle --file scripts/brew/Brewfile.recommended   # gitleaks, gh, tmux
+brew bundle --file scripts/brew/Brewfile.recommended   # gitleaks, tmux
 make build                                              # -> bin/baron
 ```
 

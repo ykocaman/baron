@@ -88,7 +88,6 @@ var deps = []depSpec{
 	{name: "bd", flag: versionFlag, pinned: "1.1.2", kind: depMandatory, install: "brew install beads"},
 	{name: "gitleaks", flag: versionFlag, pinned: "8.30.1", kind: depRequired, install: "brew install gitleaks"},
 	{name: "hunk", flag: versionFlag, min: "0.17.0", kind: depOptional, install: "brew install hunk"},
-	{name: "glow", flag: versionFlag, min: "2.0.0", kind: depOptional, install: "brew install glow"},
 	{name: "tmux", flag: "-V", min: "3.3.0", kind: depOptional, install: "brew install tmux"},
 }
 
